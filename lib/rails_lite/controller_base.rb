@@ -1,7 +1,7 @@
 require 'erb'
 require_relative 'params'
 require_relative 'session'
-
+require 'active_support/core_ext'
 
 class ControllerBase
   attr_reader :params
@@ -31,10 +31,12 @@ class ControllerBase
   end
 
   def render(template_name)
-    template_file = File.read(template_name)
+    controller_name = self.class.to_s.underscore
+    template_path = "views/#{controller_name}/#{template_name}.html.erb"
+    template_file = File.read(template_path)
     erb_template = ERB.new(template_file).result(binding)
 
-    render_content(erb_template.eval, "text/html")
+    render_content(erb_template, "text/html")
   end
 
   def invoke_action(name)
