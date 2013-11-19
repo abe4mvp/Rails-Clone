@@ -7,26 +7,30 @@ class ControllerBase
   attr_reader :params
 
   def initialize(req, res, route_params = {})
+
     @req, @res = req, res
   end
 
   def session
+    @session ||= Session.new(JSON.parse(@req.cookie))
   end
 
   def already_rendered?
+    #???  @already_built_response == @res
   end
 
   def redirect_to(url)
     @res.status = 302
     @res["location"] = url
-
+    Session.store_session(res)
     @already_built_response = @res
+
   end
 
   def render_content(content, type)
     @res.body =  content
     @res.content_type =  type
-
+    Session.store_session(res)
     @already_built_response = @res
   end
 
