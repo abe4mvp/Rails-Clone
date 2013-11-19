@@ -12,7 +12,7 @@ class ControllerBase
   end
 
   def session
-    @session ||= Session.new(JSON.parse(@req.cookie))
+    @session ||= Session.new(@req)
   end
 
   def already_rendered?
@@ -22,7 +22,7 @@ class ControllerBase
   def redirect_to(url)
     @res.status = 302
     @res["location"] = url
-    Session.store_session(res)
+    @session.store_session(res)
     @already_built_response = @res
 
   end
@@ -30,7 +30,7 @@ class ControllerBase
   def render_content(content, type)
     @res.body =  content
     @res.content_type =  type
-    Session.store_session(res)
+    @session.store_session(@res)
     @already_built_response = @res
   end
 

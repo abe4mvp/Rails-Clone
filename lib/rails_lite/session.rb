@@ -4,27 +4,26 @@ require 'webrick'
 class Session
   attr_accessor :cookie
   def initialize(req)
-
-
-    @cookie = WEBrick::Cookie('_rails_lite_app', "")
+    @cookie = WEBrick::Cookie.new('_rails_lite_app', {})
     req.cookies.each do |cookie|
       if cookie.name == @cookie.name
-        @cookie.value = JSON.parse(cookie)
+        @value = JSON.parse(cookie.value)
+        #@cookie = WEBrick::Cookie.new('_rails_lite_app', value)
       end
     end
-    @cookie ||= {}
+    @value ||= {}
   end
 
   def [](key)
-    @cookie[key]
+    @value[key]
   end
 
   def []=(key, val)
-    @cookie[key] = val
+    @value[key] = val
   end
 
   def store_session(res)
-
-    res.cookies << @cookie.to_json
+    @cookie = WEBrick::Cookie.new('_rails_lite_app', @value.to_json)
+    res.cookies << @cookie
   end
 end
