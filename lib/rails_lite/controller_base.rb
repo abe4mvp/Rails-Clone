@@ -9,6 +9,7 @@ class ControllerBase
   def initialize(req, res, route_params = {})
 
     @req, @res = req, res
+    @params = Params.new(req, route_params)
   end
 
   def session
@@ -22,7 +23,7 @@ class ControllerBase
   def redirect_to(url)
     @res.status = 302
     @res["location"] = url
-    @session.store_session(res)
+    session.store_session(res)
     @already_built_response = @res
 
   end
@@ -30,7 +31,7 @@ class ControllerBase
   def render_content(content, type)
     @res.body =  content
     @res.content_type =  type
-    @session.store_session(@res)
+    session.store_session(@res)
     @already_built_response = @res
   end
 

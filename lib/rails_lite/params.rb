@@ -2,16 +2,21 @@ require 'uri'
 
 class Params
   def initialize(req, route_params)
+    @params = parse_www_encoded_form(req.query_string)
+
   end
 
   def [](key)
+    @params[key] #maybe?
   end
 
   def to_s
+    @params.join(" ") #maybe?
   end
 
   private
   def parse_www_encoded_form(www_encoded_form)
+    URI.decode_www_form(www_encoded_form)
   end
 
   def parse_key(key)

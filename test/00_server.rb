@@ -11,7 +11,7 @@ trap('INT') { server.shutdown }
 
 class MyController < ControllerBase
   def go
-    
+
     #render_content("hello world!", "text/html")
     #redirect_to('http://www.google.com')
 
@@ -20,7 +20,7 @@ class MyController < ControllerBase
 
     # after you have sessions going, uncomment:
     session["count"] ||= 0
-     session["count"] += 1
+    session["count"] += 1
     render :counting_show
   end
 end
