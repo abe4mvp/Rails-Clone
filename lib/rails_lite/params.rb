@@ -30,13 +30,13 @@ class Params
       current_scope = params # reset to outter scope for each iteration
       
       key_sequence = parse_key(outter_key)
+      
       key_sequence.each_with_index do  |inner_key, idx|
-        
-        if (idx + 1) == key_sequence.count
-          current_scope[key] = value
+        if (idx + 1) == key_sequence.count # last key in scope
+          current_scope[inner_key] = value
         else
-          current_scope[key] ||= {}
-          current_scope = current_scope[key]
+          current_scope[inner_key] ||= {}
+          current_scope = current_scope[inner_key]
         end
       end
     end
@@ -45,11 +45,5 @@ class Params
   end
 
   def parse_key(key)
-    match_data = /(?<head>.*)\[(?<rest>.*)\]/.match(key)
-    if match_data
-      parse_key(match_data["head"]).push(match_data["rest"])
-    else
-      [key]
-    end
-  end
+    key.split(/\]\[|\[|\]/)
 end
