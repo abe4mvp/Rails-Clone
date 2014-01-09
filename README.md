@@ -1,6 +1,6 @@
 Light-Rail by Abe Schonfeld
 ===========
-Cool Features
+Cool Features:
 
 •	Used Ruby Meta-programming ensure DRY, functional code
 •	Used Webrick server to store session cookies
