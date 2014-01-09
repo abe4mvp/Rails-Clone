@@ -7,7 +7,7 @@ class ControllerBase
   attr_reader :params
 
   def initialize(req, res, route_params = {})
-    @already_built_response = true
+    @already_built_response = false
     @req, @res = req, res
     @params = Params.new(req, route_params)
   end
@@ -17,10 +17,12 @@ class ControllerBase
   end
 
   def already_rendered?
-    @already_built_response
+    !!@already_built_response
   end
 
   def redirect_to(url)
+    raise "double render error" if already_rendered?
+    
     @res.status = 302
     @res["location"] = url
     session.store_session(res)
@@ -29,6 +31,8 @@ class ControllerBase
   end
 
   def render_content(content, type)
+    raise "double render error" if already_rendered?
+    
     @res.body =  content
     @res.content_type =  type
     session.store_session(@res)
@@ -45,5 +49,10 @@ class ControllerBase
   end
 
   def invoke_action(name)
+    self.send(name)
+      unless already_rendered?
+        render(name)
+      end
+    nil
   end
 end

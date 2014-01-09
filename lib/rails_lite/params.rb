@@ -2,16 +2,22 @@ require 'uri'
 
 class Params
   def initialize(req, route_params)
-    @params = parse_www_encoded_form(req.query_string)
+    
+    @params = {}
+    @params.merge!(route_params)
+    
+    @params.merge!(parse_www_encoded_form(req.body)) if req.body 
+    @params.merge!(parse_www_encoded_form(req.query_string)) if req.query_string
+
 
   end
 
   def [](key)
-    @params[key] #maybe?
+    @params[key] 
   end
 
   def to_s
-    @params.join(" ") #maybe?
+    @params.to_json.to_s
   end
 
   private
