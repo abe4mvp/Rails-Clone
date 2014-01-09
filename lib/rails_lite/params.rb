@@ -44,6 +44,6 @@ class Params
     params
   end
 
-  def parse_key(key)
+  def parse_key(key) #split up by brackets
     key.split(/\]\[|\[|\]/)
 end
